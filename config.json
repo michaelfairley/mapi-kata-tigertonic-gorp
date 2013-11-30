@@ -1,0 +1,3 @@
+{
+  "database": "dbname=microblog_api_kata sslmode=disable"
+}
