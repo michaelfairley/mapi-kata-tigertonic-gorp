@@ -32,5 +32,5 @@ func (resource *UserResource) CreateUser(url *url.URL, in_headers http.Header, u
 func (resource *UserResource) GetUser(url *url.URL, in_headers http.Header, _ interface{}) (int, http.Header, *api.User, error) {
 	user := resource.Repository.FindByUsername(url.Query().Get("username"))
 
-	return 200, http.Header{}, &user, nil
+	return 200, http.Header{}, user, nil
 }

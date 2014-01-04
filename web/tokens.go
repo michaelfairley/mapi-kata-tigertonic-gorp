@@ -14,8 +14,11 @@ type TokensResource struct {
 
 func (resource *TokensResource) CreateToken(url *url.URL, in_headers http.Header, auth *api.Auth) (int, http.Header, interface{}, error) {
 	user := resource.UserRepo.FindByUsername(auth.Username)
+	if user == nil {
+		return 401, nil, nil, nil
+	}
 
-	token := api.NewTokenForUser(user)
+	token := api.NewTokenForUser(*user)
 	resource.Repo.Insert(&token)
 
 	return 200, nil, token, nil

@@ -1,8 +1,10 @@
 package repository
 
 import (
+	"database/sql"
 	"github.com/michaelfairley/mapi-tigertonic-gorp/api"
 	"github.com/michaelfairley/mapi-tigertonic-gorp/github.com/coopernurse/gorp"
+	"github.com/michaelfairley/mapi-tigertonic-gorp/utils"
 )
 
 type UserRepository struct {
@@ -22,13 +24,14 @@ func (repo UserRepository) Insert(user *api.User) {
 	repo.Db.Insert(user)
 }
 
-func (repo UserRepository) FindByUsername(username string) api.User {
-	user := api.User{}
+func (repo UserRepository) FindByUsername(username string) *api.User {
+	user := &api.User{}
 
-	err := repo.Db.SelectOne(&user, "SELECT username, realname FROM users WHERE username = $1", username)
-	if err != nil {
-		panic(err)
+	err := repo.Db.SelectOne(user, "SELECT username, realname FROM users WHERE username = $1", username)
+	if err == sql.ErrNoRows {
+		return nil
 	}
+	utils.CheckErr(err)
 
 	return user
 }
