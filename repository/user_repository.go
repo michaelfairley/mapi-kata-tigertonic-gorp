@@ -27,7 +27,7 @@ func (repo UserRepository) Insert(user *api.User) {
 func (repo UserRepository) FindByUsername(username string) *api.User {
 	user := &api.User{}
 
-	err := repo.Db.SelectOne(user, "SELECT username, realname FROM users WHERE username = $1", username)
+	err := repo.Db.SelectOne(user, "SELECT * FROM users WHERE username = $1", username)
 	if err == sql.ErrNoRows {
 		return nil
 	}

@@ -23,3 +23,8 @@ func (u *User) PreInsert(s gorp.SqlExecutor) error {
 
 	return nil
 }
+
+func (u *User) CheckPassword(password string) bool {
+	err := bcrypt.CompareHashAndPassword(u.CryptedPassword, []byte(password))
+	return err == nil
+}

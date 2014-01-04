@@ -17,6 +17,9 @@ func (resource *TokensResource) CreateToken(url *url.URL, in_headers http.Header
 	if user == nil {
 		return 401, nil, nil, nil
 	}
+	if !user.CheckPassword(auth.Password) {
+		return 401, nil, nil, nil
+	}
 
 	token := api.NewTokenForUser(*user)
 	resource.Repo.Insert(&token)
