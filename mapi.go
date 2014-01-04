@@ -6,6 +6,7 @@ import (
 	_ "github.com/michaelfairley/mapi-tigertonic-gorp/github.com/bmizerany/pq"
 	"github.com/michaelfairley/mapi-tigertonic-gorp/github.com/coopernurse/gorp"
 	"github.com/michaelfairley/mapi-tigertonic-gorp/github.com/rcrowley/go-tigertonic"
+	"github.com/michaelfairley/mapi-tigertonic-gorp/repository"
 	"github.com/michaelfairley/mapi-tigertonic-gorp/web"
 	"log"
 	"net/http"
@@ -28,7 +29,7 @@ func setupDB(url string) *gorp.DbMap {
 func setupMux(db *gorp.DbMap) http.Handler {
 	mux := tigertonic.NewTrieServeMux()
 
-	userResource := web.UserResource{db}
+	userResource := web.UserResource{repository.UserRepository{db}}
 	mux.Handle("POST", "/users", tigertonic.Marshaled(userResource.CreateUser))
 	mux.Handle("GET", "/users/{username}", tigertonic.Marshaled(userResource.GetUser))
 
