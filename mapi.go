@@ -22,6 +22,7 @@ func setupDB(url string) *gorp.DbMap {
 	dbmap := &gorp.DbMap{Db: db, Dialect: gorp.PostgresDialect{}}
 
 	dbmap.AddTableWithName(api.User{}, "users").SetKeys(true, "Id")
+	dbmap.AddTableWithName(api.Token{}, "tokens")
 
 	return dbmap
 }
@@ -29,9 +30,15 @@ func setupDB(url string) *gorp.DbMap {
 func setupMux(db *gorp.DbMap) http.Handler {
 	mux := tigertonic.NewTrieServeMux()
 
-	userResource := web.UserResource{repository.UserRepository{db}}
+	userRepository := repository.UserRepository{db}
+	tokenRepository := repository.TokenRepository{db}
+
+	userResource := web.UserResource{userRepository}
 	mux.Handle("POST", "/users", tigertonic.Marshaled(userResource.CreateUser))
 	mux.Handle("GET", "/users/{username}", tigertonic.Marshaled(userResource.GetUser))
+
+	tokensResource := web.TokensResource{tokenRepository, userRepository}
+	mux.Handle("POST", "/tokens", tigertonic.Marshaled(tokensResource.CreateToken))
 
 	return mux
 }
