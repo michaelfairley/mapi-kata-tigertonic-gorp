@@ -35,3 +35,15 @@ func (repo UserRepository) FindByUsername(username string) *api.User {
 
 	return user
 }
+
+func (repo UserRepository) Find(id uint64) *api.User {
+	user := &api.User{}
+
+	err := repo.Db.SelectOne(user, "SELECT * FROM users WHERE id = $1", id)
+	if err == sql.ErrNoRows {
+		return nil
+	}
+	utils.CheckErr(err)
+
+	return user
+}

@@ -23,6 +23,7 @@ func setupDB(url string) *gorp.DbMap {
 
 	dbmap.AddTableWithName(api.User{}, "users").SetKeys(true, "Id")
 	dbmap.AddTableWithName(api.Token{}, "tokens")
+	dbmap.AddTableWithName(api.DbPost{}, "posts").SetKeys(true, "Id")
 
 	return dbmap
 }
@@ -32,6 +33,7 @@ func setupMux(db *gorp.DbMap) http.Handler {
 
 	userRepository := repository.UserRepository{db}
 	tokenRepository := repository.TokenRepository{db}
+	postRepository := repository.PostRepository{db}
 
 	userResource := web.UserResource{userRepository}
 	mux.Handle("POST", "/users", tigertonic.Marshaled(userResource.CreateUser))
@@ -39,6 +41,10 @@ func setupMux(db *gorp.DbMap) http.Handler {
 
 	tokensResource := web.TokensResource{tokenRepository, userRepository}
 	mux.Handle("POST", "/tokens", tigertonic.Marshaled(tokensResource.CreateToken))
+
+	postsResource := web.PostsResource{postRepository, userRepository}
+	mux.Handle("POST", "/users/{username}/posts", tigertonic.Marshaled(postsResource.CreatePost))
+	mux.Handle("GET", "/posts/{id}", tigertonic.Marshaled(postsResource.GetPost))
 
 	return mux
 }
