@@ -2,6 +2,7 @@ package web
 
 import (
 	"errors"
+	"github.com/michaelfairley/mapi-tigertonic-gorp/api"
 	"github.com/michaelfairley/mapi-tigertonic-gorp/github.com/rcrowley/go-tigertonic"
 	"github.com/michaelfairley/mapi-tigertonic-gorp/repository"
 	"net/http"
@@ -19,27 +20,38 @@ type Auther struct {
 	TokenRepo repository.TokenRepository
 }
 
-func (auther Auther) Auth(request *http.Request) (http.Header, error) {
-	authentication := request.Header["Authentication"]
+func (auther Auther) Auth(headers http.Header) *api.User {
+	authentication := headers["Authentication"]
 	if len(authentication) != 1 {
-		return nil, unauthorized
+		return nil
 	}
 	if !tokenRegex.MatchString(authentication[0]) {
-		return nil, unauthorized
+		return nil
 	}
 	tokenValue := authentication[0][6:]
 	token := auther.TokenRepo.FindByValue(tokenValue)
 	if token == nil {
+		return nil
+	}
+
+	user := auther.UserRepo.Find(token.UserId)
+
+	return user
+}
+
+func (auther Auther) Filter(request *http.Request) (http.Header, error) {
+	tokenUser := auther.Auth(request.Header)
+	if tokenUser == nil {
 		return nil, unauthorized
 	}
 
-	user := auther.UserRepo.FindByUsername(request.URL.Query().Get("username"))
+	pathUser := auther.UserRepo.FindByUsername(request.URL.Query().Get("username"))
 
-	if user == nil {
+	if pathUser == nil {
 		return nil, forbidden
 	}
 
-	if user.Id != token.UserId {
+	if pathUser.Id != tokenUser.Id {
 		return nil, forbidden
 	}
 

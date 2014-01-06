@@ -44,9 +44,10 @@ func setupMux(db *gorp.DbMap) http.Handler {
 	tokensResource := web.TokensResource{tokenRepository, userRepository}
 	mux.Handle("POST", "/tokens", tigertonic.Marshaled(tokensResource.CreateToken))
 
-	postsResource := web.PostsResource{postRepository, userRepository}
-	mux.Handle("POST", "/users/{username}/posts", tigertonic.If(auther.Auth, tigertonic.Marshaled(postsResource.CreatePost)))
+	postsResource := web.PostsResource{postRepository, userRepository, auther}
+	mux.Handle("POST", "/users/{username}/posts", tigertonic.If(auther.Filter, tigertonic.Marshaled(postsResource.CreatePost)))
 	mux.Handle("GET", "/posts/{id}", tigertonic.Marshaled(postsResource.GetPost))
+	mux.Handle("DELETE", "/posts/{id}", tigertonic.Marshaled(postsResource.DeletePost))
 
 	return mux
 }

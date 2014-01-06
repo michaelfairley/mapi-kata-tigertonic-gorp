@@ -26,3 +26,8 @@ func (repo PostRepository) Find(id uint64) *api.DbPost {
 
 	return post
 }
+
+func (repo PostRepository) Delete(post *api.DbPost) {
+	_, err := repo.Db.Delete(post)
+	utils.CheckErr(err)
+}
