@@ -12,7 +12,7 @@ type TokensResource struct {
 	UserRepo repository.UserRepository
 }
 
-func (resource *TokensResource) CreateToken(url *url.URL, in_headers http.Header, auth *api.Auth) (int, http.Header, interface{}, error) {
+func (resource *TokensResource) CreateToken(url *url.URL, inHeaders http.Header, auth *api.Auth) (int, http.Header, interface{}, error) {
 	user := resource.UserRepo.FindByUsername(auth.Username)
 	if user == nil {
 		return 401, nil, nil, nil

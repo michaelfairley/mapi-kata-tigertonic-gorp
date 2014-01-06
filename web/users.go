@@ -11,7 +11,7 @@ type UserResource struct {
 	Repository repository.UserRepository
 }
 
-func (resource *UserResource) CreateUser(url *url.URL, in_headers http.Header, user *api.User) (int, http.Header, interface{}, error) {
+func (resource *UserResource) CreateUser(url *url.URL, inHeaders http.Header, user *api.User) (int, http.Header, interface{}, error) {
 	existing := resource.Repository.ContainsUserWithUsername(user.Username)
 
 	if existing {
@@ -29,7 +29,7 @@ func (resource *UserResource) CreateUser(url *url.URL, in_headers http.Header, u
 	return 303, headers, nil, nil
 }
 
-func (resource *UserResource) GetUser(url *url.URL, in_headers http.Header, _ interface{}) (int, http.Header, *api.User, error) {
+func (resource *UserResource) GetUser(url *url.URL, inHeaders http.Header, _ interface{}) (int, http.Header, *api.User, error) {
 	user := resource.Repository.FindByUsername(url.Query().Get("username"))
 
 	return 200, http.Header{}, user, nil

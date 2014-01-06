@@ -14,7 +14,7 @@ type PostsResource struct {
 	Auther   Auther
 }
 
-func (resource *PostsResource) CreatePost(url *url.URL, in_headers http.Header, post *api.Post) (int, http.Header, interface{}, error) {
+func (resource *PostsResource) CreatePost(url *url.URL, inHeaders http.Header, post *api.Post) (int, http.Header, interface{}, error) {
 	user := resource.UserRepo.FindByUsername(url.Query().Get("username"))
 	dbPost := &api.DbPost{UserId: user.Id, Text: post.Text}
 
@@ -27,7 +27,7 @@ func (resource *PostsResource) CreatePost(url *url.URL, in_headers http.Header, 
 	return 303, headers, nil, nil
 }
 
-func (resource *PostsResource) GetPost(url *url.URL, in_headers http.Header, _ interface{}) (int, http.Header, *api.Post, error) {
+func (resource *PostsResource) GetPost(url *url.URL, inHeaders http.Header, _ interface{}) (int, http.Header, *api.Post, error) {
 	id, err := strconv.ParseUint(url.Query().Get("id"), 10, 64)
 	if err != nil {
 		return 404, nil, nil, nil
@@ -44,7 +44,7 @@ func (resource *PostsResource) GetPost(url *url.URL, in_headers http.Header, _ i
 	return 200, http.Header{}, post, nil
 }
 
-func (resource *PostsResource) DeletePost(url *url.URL, in_headers http.Header, _ interface{}) (int, http.Header, interface{}, error) {
+func (resource *PostsResource) DeletePost(url *url.URL, inHeaders http.Header, _ interface{}) (int, http.Header, interface{}, error) {
 	id, err := strconv.ParseUint(url.Query().Get("id"), 10, 64)
 	if err != nil {
 		return 404, nil, nil, nil
@@ -55,7 +55,7 @@ func (resource *PostsResource) DeletePost(url *url.URL, in_headers http.Header, 
 		return 404, nil, nil, nil
 	}
 
-	author := resource.Auther.Auth(in_headers)
+	author := resource.Auther.Auth(inHeaders)
 
 	if author == nil {
 		return 401, nil, nil, nil
