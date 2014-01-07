@@ -68,3 +68,17 @@ func (resource *PostsResource) DeletePost(url *url.URL, inHeaders http.Header, _
 
 	return 204, http.Header{}, nil, nil
 }
+
+func (resource *PostsResource) ListPosts(url *url.URL, inHeaders http.Header, _ interface{}) (int, http.Header, *api.Posts, error) {
+	user := resource.UserRepo.FindByUsername(url.Query().Get("username"))
+
+	dbPosts := resource.Repo.FindByUserId(user.Id)
+
+	posts := make([]*api.Post, len(dbPosts))
+
+	for i := range dbPosts {
+		posts[i] = &api.Post{Author: user.Username, Text: dbPosts[i].Text, Id: dbPosts[i].Id}
+	}
+
+	return 200, http.Header{}, &api.Posts{Posts: posts}, nil
+}

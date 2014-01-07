@@ -11,3 +11,7 @@ type Post struct {
 	Text   string `json:"text"`
 	Author string `json:"author"`
 }
+
+type Posts struct {
+	Posts []*Post `json:"posts"`
+}
