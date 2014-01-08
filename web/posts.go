@@ -71,6 +71,9 @@ func (resource *PostsResource) DeletePost(url *url.URL, inHeaders http.Header, _
 
 func (resource *PostsResource) ListPosts(url *url.URL, inHeaders http.Header, _ interface{}) (int, http.Header, *api.Posts, error) {
 	user := resource.UserRepo.FindByUsername(url.Query().Get("username"))
+	if user == nil {
+		return 404, nil, nil, nil
+	}
 
 	dbPosts := resource.Repo.FindByUserId(user.Id)
 
