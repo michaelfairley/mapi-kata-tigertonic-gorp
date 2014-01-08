@@ -32,10 +32,16 @@ func (repo PostRepository) Delete(post *api.DbPost) {
 	utils.CheckErr(err)
 }
 
-func (repo PostRepository) FindByUserId(id uint64) []*api.DbPost {
+func (repo PostRepository) FindByUserId(id uint64, after *uint64) []*api.DbPost {
 	var posts []*api.DbPost
+	var err error
 
-	_, err := repo.Db.Select(&posts, "SELECT * FROM posts WHERE user_id = $1 ORDER BY id DESC LIMIT 50", id)
+	if after == nil {
+		_, err = repo.Db.Select(&posts, "SELECT * FROM posts WHERE user_id = $1 ORDER BY id DESC LIMIT 50", id)
+	} else {
+		_, err = repo.Db.Select(&posts, "SELECT * FROM posts WHERE user_id = $1 AND id < $2 ORDER BY id DESC LIMIT 50", id, after)
+
+	}
 	utils.CheckErr(err)
 
 	return posts

@@ -75,7 +75,14 @@ func (resource *PostsResource) ListPosts(url *url.URL, inHeaders http.Header, _ 
 		return 404, nil, nil, nil
 	}
 
-	dbPosts := resource.Repo.FindByUserId(user.Id)
+	after, err := strconv.ParseUint(url.Query().Get("after"), 10, 64)
+
+	var dbPosts []*api.DbPost
+	if err == nil {
+		dbPosts = resource.Repo.FindByUserId(user.Id, &after)
+	} else {
+		dbPosts = resource.Repo.FindByUserId(user.Id, nil)
+	}
 
 	posts := make([]*api.Post, len(dbPosts))
 
@@ -83,5 +90,12 @@ func (resource *PostsResource) ListPosts(url *url.URL, inHeaders http.Header, _ 
 		posts[i] = &api.Post{Author: user.Username, Text: dbPosts[i].Text, Id: dbPosts[i].Id}
 	}
 
-	return 200, http.Header{}, &api.Posts{Posts: posts}, nil
+	var lastId uint64
+	if len(dbPosts) > 0 {
+		lastId = dbPosts[len(dbPosts)-1].Id
+	} else {
+		lastId = after
+	}
+	next := api.Next{user.Username, "posts", lastId}
+	return 200, http.Header{}, &api.Posts{Posts: posts, Next: next}, nil
 }
