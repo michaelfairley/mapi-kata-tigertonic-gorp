@@ -50,6 +50,9 @@ func setupMux(db *gorp.DbMap) http.Handler {
 	mux.Handle("DELETE", "/posts/{id}", tigertonic.Marshaled(postsResource.DeletePost))
 	mux.Handle("GET", "/users/{username}/posts", tigertonic.Marshaled(postsResource.ListPosts))
 
+	followingResource := web.FollowingResource{userRepository, auther}
+	mux.HandleFunc("PUT", "/users/{username}/following/{other}", followingResource.Follow)
+
 	return mux
 }
 

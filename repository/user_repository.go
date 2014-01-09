@@ -21,7 +21,8 @@ func (repo UserRepository) ContainsUserWithUsername(username string) bool {
 }
 
 func (repo UserRepository) Insert(user *api.User) {
-	repo.Db.Insert(user)
+	err := repo.Db.Insert(user)
+	utils.CheckErr(err)
 }
 
 func (repo UserRepository) FindByUsername(username string) *api.User {
@@ -46,4 +47,26 @@ func (repo UserRepository) Find(id uint64) *api.User {
 	utils.CheckErr(err)
 
 	return user
+}
+
+func (repo UserRepository) FindFollowers(user *api.User) []*api.User {
+	var users []*api.User
+
+	_, err := repo.Db.Select(&users, "SELECT id, username FROM users JOIN followings ON followings.follower_id = users.id WHERE followings.followee_id = $1", user.Id)
+	utils.CheckErr(err)
+
+	return users
+}
+
+func (repo UserRepository) FindFollowing(user *api.User) []*api.User {
+	var users []*api.User
+
+	_, err := repo.Db.Select(&users, "SELECT id, username FROM users JOIN followings ON followings.followee_id = users.id WHERE followings.follower_id = $1", user.Id)
+	utils.CheckErr(err)
+
+	return users
+}
+
+func (repo UserRepository) Follow(follower, followee *api.User) {
+	repo.Db.Exec("INSERT INTO followings (follower_id, followee_id) VALUES ($1, $2)", follower.Id, followee.Id)
 }

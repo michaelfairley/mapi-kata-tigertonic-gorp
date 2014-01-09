@@ -6,11 +6,13 @@ import (
 )
 
 type User struct {
-	Id              uint64 `json:"-"`
-	Username        string `json:"username"`
-	Password        string `json:"password,omitempty" db:"-"`
-	Realname        string `json:"real_name"`
-	CryptedPassword []byte `json:"-" db:"password"`
+	Id              uint64   `json:"-"`
+	Username        string   `json:"username"`
+	Password        string   `json:"password,omitempty" db:"-"`
+	Realname        string   `json:"real_name"`
+	CryptedPassword []byte   `json:"-" db:"password"`
+	Followers       []string `json:"followers" db:"-"`
+	Following       []string `json:"following" db:"-"`
 }
 
 func (u *User) PreInsert(s gorp.SqlExecutor) error {

@@ -31,6 +31,25 @@ func (resource *UserResource) CreateUser(url *url.URL, inHeaders http.Header, us
 
 func (resource *UserResource) GetUser(url *url.URL, inHeaders http.Header, _ interface{}) (int, http.Header, *api.User, error) {
 	user := resource.Repository.FindByUsername(url.Query().Get("username"))
+	if user == nil {
+		return 404, nil, nil, nil
+	}
+
+	followers := resource.Repository.FindFollowers(user)
+	following := resource.Repository.FindFollowing(user)
+
+	followerNames := make([]string, len(followers))
+	for i := range followers {
+		followerNames[i] = followers[i].Username
+	}
+
+	followingNames := make([]string, len(following))
+	for i := range following {
+		followingNames[i] = following[i].Username
+	}
+
+	user.Followers = followerNames
+	user.Following = followingNames
 
 	return 200, http.Header{}, user, nil
 }
