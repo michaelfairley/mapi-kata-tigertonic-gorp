@@ -16,6 +16,16 @@ func (resource FollowingResource) Follow(w http.ResponseWriter, req *http.Reques
 	user := resource.Repo.FindByUsername(req.URL.Query().Get("username"))
 	other := resource.Repo.FindByUsername(req.URL.Query().Get("other"))
 
+	currentUser := resource.Auther.Auth(req.Header)
+	if currentUser == nil {
+		w.WriteHeader(401)
+		return
+	}
+	if currentUser.Id != user.Id {
+		w.WriteHeader(403)
+		return
+	}
+
 	resource.Repo.Follow(user, other)
 
 	w.WriteHeader(201)
