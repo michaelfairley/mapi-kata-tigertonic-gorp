@@ -52,6 +52,7 @@ func setupMux(db *gorp.DbMap) http.Handler {
 
 	followingResource := web.FollowingResource{userRepository, auther}
 	mux.HandleFunc("PUT", "/users/{username}/following/{other}", followingResource.Follow)
+	mux.HandleFunc("DELETE", "/users/{username}/following/{other}", followingResource.Unfollow)
 
 	return mux
 }

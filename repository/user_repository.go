@@ -70,3 +70,11 @@ func (repo UserRepository) FindFollowing(user *api.User) []*api.User {
 func (repo UserRepository) Follow(follower, followee *api.User) {
 	repo.Db.Exec("INSERT INTO followings (follower_id, followee_id) VALUES ($1, $2)", follower.Id, followee.Id)
 }
+
+func (repo UserRepository) Unfollow(follower, followee *api.User) bool {
+	res, err := repo.Db.Exec("DELETE FROM followings WHERE follower_id = $1 AND followee_id = $2", follower.Id, followee.Id)
+	utils.CheckErr(err)
+	rows, err := res.RowsAffected()
+	utils.CheckErr(err)
+	return rows > 0
+}
