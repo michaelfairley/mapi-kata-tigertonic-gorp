@@ -46,6 +46,7 @@ func (resource *UserResource) GetUser(url *url.URL, inHeaders http.Header, _ int
 	followingNames := make([]string, len(following))
 	for i := range following {
 		followingNames[i] = following[i].Username
+
 	}
 
 	user.Followers = followerNames

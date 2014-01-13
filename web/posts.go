@@ -99,3 +99,39 @@ func (resource *PostsResource) ListPosts(url *url.URL, inHeaders http.Header, _ 
 	next := api.Next{user.Username, "posts", lastId}
 	return 200, http.Header{}, &api.Posts{Posts: posts, Next: next}, nil
 }
+
+func (resource *PostsResource) ShowTimeline(url *url.URL, inHeaders http.Header, _ interface{}) (int, http.Header, *api.Posts, error) {
+	user := resource.UserRepo.FindByUsername(url.Query().Get("username"))
+	if user == nil {
+		return 404, nil, nil, nil
+	}
+
+	following := resource.UserRepo.FindFollowing(user)
+	followingIds := make([]uint64, len(following))
+	for i := range following {
+		followingIds[i] = following[i].Id
+	}
+
+	after, err := strconv.ParseUint(url.Query().Get("after"), 10, 64)
+
+	var dbPosts []*api.DbPost
+	if err == nil {
+		dbPosts = resource.Repo.FindByUserIds(followingIds, &after)
+	} else {
+		dbPosts = resource.Repo.FindByUserIds(followingIds, nil)
+	}
+
+	posts := make([]*api.Post, len(dbPosts))
+	for i := range dbPosts {
+		posts[i] = &api.Post{Author: user.Username, Text: dbPosts[i].Text, Id: dbPosts[i].Id}
+	}
+
+	var lastId uint64
+	if len(dbPosts) > 0 {
+		lastId = dbPosts[len(dbPosts)-1].Id
+	} else {
+		lastId = after
+	}
+	next := api.Next{user.Username, "timeline", lastId}
+	return 200, http.Header{}, &api.Posts{Posts: posts, Next: next}, nil
+}

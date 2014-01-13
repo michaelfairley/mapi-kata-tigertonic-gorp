@@ -5,6 +5,8 @@ import (
 	"github.com/michaelfairley/mapi-tigertonic-gorp/api"
 	"github.com/michaelfairley/mapi-tigertonic-gorp/github.com/coopernurse/gorp"
 	"github.com/michaelfairley/mapi-tigertonic-gorp/utils"
+	"strconv"
+	"strings"
 )
 
 type PostRepository struct {
@@ -33,13 +35,24 @@ func (repo PostRepository) Delete(post *api.DbPost) {
 }
 
 func (repo PostRepository) FindByUserId(id uint64, after *uint64) []*api.DbPost {
+	return repo.FindByUserIds([]uint64{id}, after)
+}
+
+func (repo PostRepository) FindByUserIds(ids []uint64, after *uint64) []*api.DbPost {
 	var posts []*api.DbPost
 	var err error
 
+	// Parameter binding for arrays would be nice.
+	strIds := make([]string, len(ids))
+	for i := range ids {
+		strIds[i] = strconv.FormatUint(ids[i], 10)
+	}
+	in := strings.Join(strIds, ", ")
+
 	if after == nil {
-		_, err = repo.Db.Select(&posts, "SELECT * FROM posts WHERE user_id = $1 ORDER BY id DESC LIMIT 50", id)
+		_, err = repo.Db.Select(&posts, "SELECT * FROM posts WHERE user_id IN ("+in+") ORDER BY id DESC LIMIT 50")
 	} else {
-		_, err = repo.Db.Select(&posts, "SELECT * FROM posts WHERE user_id = $1 AND id < $2 ORDER BY id DESC LIMIT 50", id, after)
+		_, err = repo.Db.Select(&posts, "SELECT * FROM posts WHERE user_id IN ("+in+") AND id < $1 ORDER BY id DESC LIMIT 50", after)
 
 	}
 	utils.CheckErr(err)
