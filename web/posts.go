@@ -108,7 +108,9 @@ func (resource *PostsResource) ShowTimeline(url *url.URL, inHeaders http.Header,
 
 	following := resource.UserRepo.FindFollowing(user)
 	followingIds := make([]uint64, len(following))
+	authors := make(map[uint64]string)
 	for i := range following {
+		authors[following[i].Id] = following[i].Username
 		followingIds[i] = following[i].Id
 	}
 
@@ -123,7 +125,7 @@ func (resource *PostsResource) ShowTimeline(url *url.URL, inHeaders http.Header,
 
 	posts := make([]*api.Post, len(dbPosts))
 	for i := range dbPosts {
-		posts[i] = &api.Post{Author: user.Username, Text: dbPosts[i].Text, Id: dbPosts[i].Id}
+		posts[i] = &api.Post{Author: authors[dbPosts[i].UserId], Text: dbPosts[i].Text, Id: dbPosts[i].Id}
 	}
 
 	var lastId uint64
