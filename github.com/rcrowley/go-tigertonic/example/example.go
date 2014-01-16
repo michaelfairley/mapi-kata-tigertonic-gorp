@@ -5,7 +5,7 @@ import (
 	_ "expvar"	// Imported for side-effect of handling /debug/vars.
 	"flag"
 	"fmt"
-	"github.com/rcrowley/go-metrics"
+	"github.com/michaelfairley/mapi-kata-tigertonic-gorp/github.com/rcrowley/go-metrics"
 	"github.com/michaelfairley/mapi-kata-tigertonic-gorp/github.com/rcrowley/go-tigertonic"
 	"log"
 	"net/http"

@@ -8,7 +8,7 @@ package bcrypt
 
 // The code is a port of Provos and Mazières's C implementation.
 import (
-	"code.google.com/p/go.crypto/blowfish"
+	"github.com/michaelfairley/mapi-kata-tigertonic-gorp/code.google.com/p/go.crypto/blowfish"
 	"crypto/rand"
 	"crypto/subtle"
 	"errors"
@@ -18,9 +18,9 @@ import (
 )
 
 const (
-	MinCost     int = 4  // the minimum allowable cost as passed in to GenerateFromPassword
-	MaxCost     int = 31 // the maximum allowable cost as passed in to GenerateFromPassword
-	DefaultCost int = 10 // the cost that will actually be set if a cost below MinCost is passed into GenerateFromPassword
+	MinCost		int	= 4	// the minimum allowable cost as passed in to GenerateFromPassword
+	MaxCost		int	= 31	// the maximum allowable cost as passed in to GenerateFromPassword
+	DefaultCost	int	= 10	// the cost that will actually be set if a cost below MinCost is passed into GenerateFromPassword
 )
 
 // The error returned from CompareHashAndPassword when a password and hash do
@@ -53,13 +53,13 @@ func (ic InvalidCostError) Error() string {
 }
 
 const (
-	majorVersion       = '2'
-	minorVersion       = 'a'
-	maxSaltSize        = 16
-	maxCryptedHashSize = 23
-	encodedSaltSize    = 22
-	encodedHashSize    = 31
-	minHashSize        = 59
+	majorVersion		= '2'
+	minorVersion		= 'a'
+	maxSaltSize		= 16
+	maxCryptedHashSize	= 23
+	encodedSaltSize		= 22
+	encodedHashSize		= 31
+	minHashSize		= 59
 )
 
 // magicCipherData is an IV for the 64 Blowfish encryption calls in
@@ -74,11 +74,11 @@ var magicCipherData = []byte{
 }
 
 type hashed struct {
-	hash  []byte
-	salt  []byte
-	cost  int // allowed range is MinCost to MaxCost
-	major byte
-	minor byte
+	hash	[]byte
+	salt	[]byte
+	cost	int	// allowed range is MinCost to MaxCost
+	major	byte
+	minor	byte
 }
 
 // GenerateFromPassword returns the bcrypt hash of the password at the given
