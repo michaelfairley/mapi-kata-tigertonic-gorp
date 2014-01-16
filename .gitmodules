@@ -1,0 +1,3 @@
+[submodule "mapi-kata"]
+	path = mapi-kata
+	url = https://github.com/michaelfairley/mapi-kata.git
