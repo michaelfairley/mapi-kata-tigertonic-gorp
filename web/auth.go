@@ -2,9 +2,9 @@ package web
 
 import (
 	"errors"
-	"github.com/michaelfairley/mapi-tigertonic-gorp/api"
-	"github.com/michaelfairley/mapi-tigertonic-gorp/github.com/rcrowley/go-tigertonic"
-	"github.com/michaelfairley/mapi-tigertonic-gorp/repository"
+	"github.com/michaelfairley/mapi-kata-tigertonic-gorp/api"
+	"github.com/michaelfairley/mapi-kata-tigertonic-gorp/github.com/rcrowley/go-tigertonic"
+	"github.com/michaelfairley/mapi-kata-tigertonic-gorp/repository"
 	"net/http"
 	"regexp"
 )

@@ -2,9 +2,9 @@ package repository
 
 import (
 	"database/sql"
-	"github.com/michaelfairley/mapi-tigertonic-gorp/api"
-	"github.com/michaelfairley/mapi-tigertonic-gorp/github.com/coopernurse/gorp"
-	"github.com/michaelfairley/mapi-tigertonic-gorp/utils"
+	"github.com/michaelfairley/mapi-kata-tigertonic-gorp/api"
+	"github.com/michaelfairley/mapi-kata-tigertonic-gorp/github.com/coopernurse/gorp"
+	"github.com/michaelfairley/mapi-kata-tigertonic-gorp/utils"
 )
 
 type TokenRepository struct {

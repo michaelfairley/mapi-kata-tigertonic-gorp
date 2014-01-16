@@ -2,7 +2,7 @@
 package mocking
 
 import (
-	"github.com/michaelfairley/mapi-tigertonic-gorp/github.com/rcrowley/go-tigertonic"
+	"github.com/michaelfairley/mapi-kata-tigertonic-gorp/github.com/rcrowley/go-tigertonic"
 	"net/http"
 	"net/url"
 )

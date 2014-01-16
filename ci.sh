@@ -4,7 +4,7 @@ cd mapi-kata
 bash setup.sh
 cd -
 
-go build && ./mapi-tigertonic-gorp config.json &
+go build && ./mapi-kata-tigertonic-gorp config.json &
 PID=$!
 
 cd mapi-kata

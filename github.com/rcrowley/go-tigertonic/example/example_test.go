@@ -1,7 +1,7 @@
 package main
 
 import (
-	"github.com/michaelfairley/mapi-tigertonic-gorp/github.com/rcrowley/go-tigertonic/mocking"
+	"github.com/michaelfairley/mapi-kata-tigertonic-gorp/github.com/rcrowley/go-tigertonic/mocking"
 	"net/http"
 	"testing"
 )

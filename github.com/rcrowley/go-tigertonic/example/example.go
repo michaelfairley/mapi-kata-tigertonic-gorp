@@ -6,7 +6,7 @@ import (
 	"flag"
 	"fmt"
 	"github.com/rcrowley/go-metrics"
-	"github.com/michaelfairley/mapi-tigertonic-gorp/github.com/rcrowley/go-tigertonic"
+	"github.com/michaelfairley/mapi-kata-tigertonic-gorp/github.com/rcrowley/go-tigertonic"
 	"log"
 	"net/http"
 	_ "net/http/pprof"	// Imported for side-effect of handling /debug/pprof.

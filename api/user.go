@@ -1,8 +1,8 @@
 package api
 
 import (
-	"github.com/michaelfairley/mapi-tigertonic-gorp/code.google.com/p/go.crypto/bcrypt"
-	"github.com/michaelfairley/mapi-tigertonic-gorp/github.com/coopernurse/gorp"
+	"github.com/michaelfairley/mapi-kata-tigertonic-gorp/code.google.com/p/go.crypto/bcrypt"
+	"github.com/michaelfairley/mapi-kata-tigertonic-gorp/github.com/coopernurse/gorp"
 )
 
 type User struct {

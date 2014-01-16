@@ -2,12 +2,12 @@ package main
 
 import (
 	"database/sql"
-	"github.com/michaelfairley/mapi-tigertonic-gorp/api"
-	_ "github.com/michaelfairley/mapi-tigertonic-gorp/github.com/bmizerany/pq"
-	"github.com/michaelfairley/mapi-tigertonic-gorp/github.com/coopernurse/gorp"
-	"github.com/michaelfairley/mapi-tigertonic-gorp/github.com/rcrowley/go-tigertonic"
-	"github.com/michaelfairley/mapi-tigertonic-gorp/repository"
-	"github.com/michaelfairley/mapi-tigertonic-gorp/web"
+	"github.com/michaelfairley/mapi-kata-tigertonic-gorp/api"
+	_ "github.com/michaelfairley/mapi-kata-tigertonic-gorp/github.com/bmizerany/pq"
+	"github.com/michaelfairley/mapi-kata-tigertonic-gorp/github.com/coopernurse/gorp"
+	"github.com/michaelfairley/mapi-kata-tigertonic-gorp/github.com/rcrowley/go-tigertonic"
+	"github.com/michaelfairley/mapi-kata-tigertonic-gorp/repository"
+	"github.com/michaelfairley/mapi-kata-tigertonic-gorp/web"
 	"log"
 	"net/http"
 	"os"
