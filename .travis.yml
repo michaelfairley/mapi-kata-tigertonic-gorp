@@ -1,3 +1,3 @@
 language: go
-install:
+install: echo "hello"
 script: "./ci.sh"
