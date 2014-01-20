@@ -2,14 +2,14 @@ package web
 
 import (
 	"github.com/michaelfairley/mapi-kata-tigertonic-gorp/api"
-	"github.com/michaelfairley/mapi-kata-tigertonic-gorp/repository"
+	"github.com/michaelfairley/mapi-kata-tigertonic-gorp/db"
 	"net/http"
 	"net/url"
 )
 
 type TokensResource struct {
-	Repo     repository.TokenRepository
-	UserRepo repository.UserRepository
+	Repo     db.TokenRepository
+	UserRepo db.UserRepository
 }
 
 func (resource *TokensResource) CreateToken(url *url.URL, inHeaders http.Header, auth *api.Auth) (int, http.Header, interface{}, error) {

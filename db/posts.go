@@ -1,24 +1,29 @@
-package repository
+package db
 
 import (
 	"database/sql"
-	"github.com/michaelfairley/mapi-kata-tigertonic-gorp/api"
 	"github.com/michaelfairley/mapi-kata-tigertonic-gorp/github.com/coopernurse/gorp"
 	"github.com/michaelfairley/mapi-kata-tigertonic-gorp/utils"
 	"strconv"
 	"strings"
 )
 
+type Post struct {
+	Id     uint64
+	UserId uint64 `db:"user_id"`
+	Text   string
+}
+
 type PostRepository struct {
 	Db *gorp.DbMap
 }
 
-func (repo PostRepository) Insert(post *api.DbPost) {
+func (repo PostRepository) Insert(post *Post) {
 	repo.Db.Insert(post)
 }
 
-func (repo PostRepository) Find(id uint64) *api.DbPost {
-	post := &api.DbPost{}
+func (repo PostRepository) Find(id uint64) *Post {
+	post := &Post{}
 
 	err := repo.Db.SelectOne(post, "SELECT * FROM posts WHERE id = $1", id)
 	if err == sql.ErrNoRows {
@@ -29,17 +34,17 @@ func (repo PostRepository) Find(id uint64) *api.DbPost {
 	return post
 }
 
-func (repo PostRepository) Delete(post *api.DbPost) {
+func (repo PostRepository) Delete(post *Post) {
 	_, err := repo.Db.Delete(post)
 	utils.CheckErr(err)
 }
 
-func (repo PostRepository) FindByUserId(id uint64, after *uint64) []*api.DbPost {
+func (repo PostRepository) FindByUserId(id uint64, after *uint64) []*Post {
 	return repo.FindByUserIds([]uint64{id}, after)
 }
 
-func (repo PostRepository) FindByUserIds(ids []uint64, after *uint64) []*api.DbPost {
-	var posts []*api.DbPost
+func (repo PostRepository) FindByUserIds(ids []uint64, after *uint64) []*Post {
+	var posts []*Post
 	var err error
 
 	// Parameter binding for arrays would be nice.

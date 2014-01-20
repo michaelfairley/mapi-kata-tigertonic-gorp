@@ -2,13 +2,13 @@ package web
 
 import (
 	"github.com/michaelfairley/mapi-kata-tigertonic-gorp/api"
-	"github.com/michaelfairley/mapi-kata-tigertonic-gorp/repository"
+	"github.com/michaelfairley/mapi-kata-tigertonic-gorp/db"
 	"net/http"
 	"net/url"
 )
 
 type UserResource struct {
-	Repository repository.UserRepository
+	Repository db.UserRepository
 }
 
 func (resource *UserResource) CreateUser(url *url.URL, inHeaders http.Header, user *api.User) (int, http.Header, interface{}, error) {

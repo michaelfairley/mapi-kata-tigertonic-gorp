@@ -3,10 +3,10 @@ package main
 import (
 	"database/sql"
 	"github.com/michaelfairley/mapi-kata-tigertonic-gorp/api"
+	"github.com/michaelfairley/mapi-kata-tigertonic-gorp/db"
 	_ "github.com/michaelfairley/mapi-kata-tigertonic-gorp/github.com/bmizerany/pq"
 	"github.com/michaelfairley/mapi-kata-tigertonic-gorp/github.com/coopernurse/gorp"
 	"github.com/michaelfairley/mapi-kata-tigertonic-gorp/github.com/rcrowley/go-tigertonic"
-	"github.com/michaelfairley/mapi-kata-tigertonic-gorp/repository"
 	"github.com/michaelfairley/mapi-kata-tigertonic-gorp/web"
 	"log"
 	"net/http"
@@ -14,26 +14,26 @@ import (
 )
 
 func setupDB(url string) *gorp.DbMap {
-	db, err := sql.Open("postgres", url)
+	dbHandle, err := sql.Open("postgres", url)
 	if err != nil {
 		panic(err)
 	}
 
-	dbmap := &gorp.DbMap{Db: db, Dialect: gorp.PostgresDialect{}}
+	dbmap := &gorp.DbMap{Db: dbHandle, Dialect: gorp.PostgresDialect{}}
 
 	dbmap.AddTableWithName(api.User{}, "users").SetKeys(true, "Id")
 	dbmap.AddTableWithName(api.Token{}, "tokens")
-	dbmap.AddTableWithName(api.DbPost{}, "posts").SetKeys(true, "Id")
+	dbmap.AddTableWithName(db.Post{}, "posts").SetKeys(true, "Id")
 
 	return dbmap
 }
 
-func setupMux(db *gorp.DbMap) http.Handler {
+func setupMux(dbMap *gorp.DbMap) http.Handler {
 	mux := tigertonic.NewTrieServeMux()
 
-	userRepository := repository.UserRepository{db}
-	tokenRepository := repository.TokenRepository{db}
-	postRepository := repository.PostRepository{db}
+	userRepository := db.UserRepository{dbMap}
+	tokenRepository := db.TokenRepository{dbMap}
+	postRepository := db.PostRepository{dbMap}
 
 	auther := web.Auther{userRepository, tokenRepository}
 
@@ -64,9 +64,9 @@ func main() {
 		log.Fatalln(err)
 	}
 
-	db := setupDB(c.Database)
+	dbMap := setupDB(c.Database)
 
-	mux := setupMux(db)
+	mux := setupMux(dbMap)
 
 	server := tigertonic.NewServer(":12346", tigertonic.ApacheLogged(mux))
 

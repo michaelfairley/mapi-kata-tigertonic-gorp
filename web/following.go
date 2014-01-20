@@ -2,13 +2,13 @@ package web
 
 import (
 	// "github.com/michaelfairley/mapi-kata-tigertonic-gorp/api"
-	"github.com/michaelfairley/mapi-kata-tigertonic-gorp/repository"
+	"github.com/michaelfairley/mapi-kata-tigertonic-gorp/db"
 	"net/http"
 	// "net/url"
 )
 
 type FollowingResource struct {
-	Repo   repository.UserRepository
+	Repo   db.UserRepository
 	Auther Auther
 }
 

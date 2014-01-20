@@ -2,21 +2,21 @@ package web
 
 import (
 	"github.com/michaelfairley/mapi-kata-tigertonic-gorp/api"
-	"github.com/michaelfairley/mapi-kata-tigertonic-gorp/repository"
+	"github.com/michaelfairley/mapi-kata-tigertonic-gorp/db"
 	"net/http"
 	"net/url"
 	"strconv"
 )
 
 type PostsResource struct {
-	Repo     repository.PostRepository
-	UserRepo repository.UserRepository
+	Repo     db.PostRepository
+	UserRepo db.UserRepository
 	Auther   Auther
 }
 
 func (resource *PostsResource) CreatePost(url *url.URL, inHeaders http.Header, post *api.Post) (int, http.Header, interface{}, error) {
 	user := resource.UserRepo.FindByUsername(url.Query().Get("username"))
-	dbPost := &api.DbPost{UserId: user.Id, Text: post.Text}
+	dbPost := &db.Post{UserId: user.Id, Text: post.Text}
 
 	resource.Repo.Insert(dbPost)
 
@@ -77,7 +77,7 @@ func (resource *PostsResource) ListPosts(url *url.URL, inHeaders http.Header, _ 
 
 	after, err := strconv.ParseUint(url.Query().Get("after"), 10, 64)
 
-	var dbPosts []*api.DbPost
+	var dbPosts []*db.Post
 	if err == nil {
 		dbPosts = resource.Repo.FindByUserId(user.Id, &after)
 	} else {
@@ -116,7 +116,7 @@ func (resource *PostsResource) ShowTimeline(url *url.URL, inHeaders http.Header,
 
 	after, err := strconv.ParseUint(url.Query().Get("after"), 10, 64)
 
-	var dbPosts []*api.DbPost
+	var dbPosts []*db.Post
 	if err == nil {
 		dbPosts = resource.Repo.FindByUserIds(followingIds, &after)
 	} else {

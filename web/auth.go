@@ -3,8 +3,8 @@ package web
 import (
 	"errors"
 	"github.com/michaelfairley/mapi-kata-tigertonic-gorp/api"
+	"github.com/michaelfairley/mapi-kata-tigertonic-gorp/db"
 	"github.com/michaelfairley/mapi-kata-tigertonic-gorp/github.com/rcrowley/go-tigertonic"
-	"github.com/michaelfairley/mapi-kata-tigertonic-gorp/repository"
 	"net/http"
 	"regexp"
 )
@@ -16,8 +16,8 @@ var (
 )
 
 type Auther struct {
-	UserRepo  repository.UserRepository
-	TokenRepo repository.TokenRepository
+	UserRepo  db.UserRepository
+	TokenRepo db.TokenRepository
 }
 
 func (auther Auther) Auth(headers http.Header) *api.User {
