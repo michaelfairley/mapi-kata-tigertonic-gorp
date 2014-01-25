@@ -21,7 +21,7 @@ func (resource *TokensResource) CreateToken(url *url.URL, inHeaders http.Header,
 		return 401, nil, nil, nil
 	}
 
-	token := api.NewTokenForUser(*user)
+	token := api.Token{Value: api.GenerateToken(), UserId: user.Id}
 	resource.Repo.Insert(&token)
 
 	return 200, nil, token, nil

@@ -21,7 +21,7 @@ func setupDB(url string) *gorp.DbMap {
 
 	dbmap := &gorp.DbMap{Db: dbHandle, Dialect: gorp.PostgresDialect{}}
 
-	dbmap.AddTableWithName(api.User{}, "users").SetKeys(true, "Id")
+	dbmap.AddTableWithName(db.User{}, "users").SetKeys(true, "Id")
 	dbmap.AddTableWithName(api.Token{}, "tokens")
 	dbmap.AddTableWithName(db.Post{}, "posts").SetKeys(true, "Id")
 

@@ -15,11 +15,7 @@ type Token struct {
 	UserId uint64 `json:"-" db:"user_id"`
 }
 
-func NewTokenForUser(user User) Token {
-	return Token{generateToken(), user.Id}
-}
-
-func generateToken() string {
+func GenerateToken() string {
 	b := make([]byte, 16)
 	_, err := rand.Read(b)
 	if err != nil {

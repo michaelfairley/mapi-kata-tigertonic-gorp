@@ -2,7 +2,6 @@ package web
 
 import (
 	"errors"
-	"github.com/michaelfairley/mapi-kata-tigertonic-gorp/api"
 	"github.com/michaelfairley/mapi-kata-tigertonic-gorp/db"
 	"github.com/michaelfairley/mapi-kata-tigertonic-gorp/github.com/rcrowley/go-tigertonic"
 	"net/http"
@@ -20,7 +19,7 @@ type Auther struct {
 	TokenRepo db.TokenRepository
 }
 
-func (auther Auther) Auth(headers http.Header) *api.User {
+func (auther Auther) Auth(headers http.Header) *db.User {
 	authentication := headers["Authentication"]
 	if len(authentication) != 1 {
 		return nil
