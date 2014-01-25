@@ -12,6 +12,10 @@ type TokensResource struct {
 	UserRepo db.UserRepository
 }
 
+func tokenForDbToken(db db.Token) api.Token {
+	return api.Token{Value: db.Value}
+}
+
 func (resource *TokensResource) CreateToken(url *url.URL, inHeaders http.Header, auth *api.Auth) (int, http.Header, interface{}, error) {
 	user := resource.UserRepo.FindByUsername(auth.Username)
 	if user == nil {
@@ -21,8 +25,8 @@ func (resource *TokensResource) CreateToken(url *url.URL, inHeaders http.Header,
 		return 401, nil, nil, nil
 	}
 
-	token := api.Token{Value: api.GenerateToken(), UserId: user.Id}
+	token := db.GenerateTokenForUser(*user)
 	resource.Repo.Insert(&token)
 
-	return 200, nil, token, nil
+	return 200, nil, tokenForDbToken(token), nil
 }

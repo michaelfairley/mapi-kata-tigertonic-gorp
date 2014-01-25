@@ -2,7 +2,6 @@ package main
 
 import (
 	"database/sql"
-	"github.com/michaelfairley/mapi-kata-tigertonic-gorp/api"
 	"github.com/michaelfairley/mapi-kata-tigertonic-gorp/db"
 	_ "github.com/michaelfairley/mapi-kata-tigertonic-gorp/github.com/bmizerany/pq"
 	"github.com/michaelfairley/mapi-kata-tigertonic-gorp/github.com/coopernurse/gorp"
@@ -22,7 +21,7 @@ func setupDB(url string) *gorp.DbMap {
 	dbmap := &gorp.DbMap{Db: dbHandle, Dialect: gorp.PostgresDialect{}}
 
 	dbmap.AddTableWithName(db.User{}, "users").SetKeys(true, "Id")
-	dbmap.AddTableWithName(api.Token{}, "tokens")
+	dbmap.AddTableWithName(db.Token{}, "tokens")
 	dbmap.AddTableWithName(db.Post{}, "posts").SetKeys(true, "Id")
 
 	return dbmap
