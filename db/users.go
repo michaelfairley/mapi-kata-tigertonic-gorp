@@ -1,8 +1,8 @@
 package db
 
 import (
-	"code.google.com/p/go.crypto/bcrypt"
 	"database/sql"
+	"github.com/michaelfairley/mapi-kata-tigertonic-gorp/code.google.com/p/go.crypto/bcrypt"
 	"github.com/michaelfairley/mapi-kata-tigertonic-gorp/github.com/coopernurse/gorp"
 	"github.com/michaelfairley/mapi-kata-tigertonic-gorp/utils"
 )
