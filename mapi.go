@@ -1,7 +1,6 @@
 package main
 
 import (
-	"database/sql"
 	"github.com/michaelfairley/mapi-kata-tigertonic-gorp/db"
 	_ "github.com/michaelfairley/mapi-kata-tigertonic-gorp/github.com/bmizerany/pq"
 	"github.com/michaelfairley/mapi-kata-tigertonic-gorp/github.com/coopernurse/gorp"
@@ -11,21 +10,6 @@ import (
 	"net/http"
 	"os"
 )
-
-func setupDB(url string) *gorp.DbMap {
-	dbHandle, err := sql.Open("postgres", url)
-	if err != nil {
-		panic(err)
-	}
-
-	dbmap := &gorp.DbMap{Db: dbHandle, Dialect: gorp.PostgresDialect{}}
-
-	dbmap.AddTableWithName(db.User{}, "users").SetKeys(true, "Id")
-	dbmap.AddTableWithName(db.Token{}, "tokens")
-	dbmap.AddTableWithName(db.Post{}, "posts").SetKeys(true, "Id")
-
-	return dbmap
-}
 
 func setupMux(dbMap *gorp.DbMap) http.Handler {
 	mux := tigertonic.NewTrieServeMux()
@@ -63,7 +47,7 @@ func main() {
 		log.Fatalln(err)
 	}
 
-	dbMap := setupDB(c.Database)
+	dbMap := db.Setup(c.Database)
 
 	mux := setupMux(dbMap)
 
